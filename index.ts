@@ -6,8 +6,7 @@ console.clear();
 
 if (!existsSync('config-tg.txt')) writeFileSync('config-tg.txt', '');
 
-const jsonLoad = (path: string): string[] => 
-    existsSync(path) ? JSON.parse(readFileSync(path, 'utf-8')) : [];
+const jsonLoad = (path: string): string[] => existsSync(path) ? JSON.parse(readFileSync(path, 'utf-8')) : [];
 
 const substringDel = (list: string[]): string[] => {
     const sorted = list.sort((a, b) => a.length - b.length);
@@ -35,10 +34,8 @@ const formatTime = (ms: number) => {
     return `${Math.floor(s / 3600)}:${Math.floor((s % 3600) / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 };
 
-// Load data and get user input
 let tgChannels = jsonLoad('telegram_channels.json').filter(x => x.length >= 5);
 const invalidChannels = jsonLoad('invalid_channels.json')
-    .filter(x => x.length >= 5);
 
 // Remove known invalid channels from scraping - no point re-checking them
 tgChannels = tgChannels.filter(ch => !invalidChannels.includes(ch));
@@ -47,13 +44,9 @@ const threads = parseInt((prompt('\nThreads for parsing: ') || '50'));
 const depth = parseInt((prompt('\nParsing depth (1dp = 20 last tg posts): ') || '1'));
 
 console.log(`\nChannels to scrape: ${tgChannels.length}, Known invalid: ${invalidChannels.length}`);
-if (tgChannels.length === 0) {
-    console.log('No channels to scrape! All channels may already be marked as invalid.');
-}
 
 const startTime = Date.now();
 
-// Extract new channel names from existing configs
 console.log('Extracting channel names from config-tg.txt...');
 const existingConfigs = existsSync("config-tg.txt") 
     ? readFileSync("config-tg.txt", "utf-8").split('\n').filter(Boolean)
@@ -192,7 +185,6 @@ const parseChannel = async (channel: string, index: number): Promise<void> => {
     }
 };
 
-// Process all channels
 console.log('Starting parallel parsing...\n');
 await Promise.all(tgChannels.map((ch, i) => parseChannel(ch, i)));
 
@@ -327,4 +319,4 @@ writeFileSync('config-tg.txt', finalConfigs.join('\n') + '\n');
 console.log('Files saved successfully!');
 
 console.log(`\nCompleted in ${formatTime(Date.now() - startTime)}`);
-prompt('\nPress Enter to finish...');
+process.exit(0);

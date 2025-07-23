@@ -17,15 +17,9 @@ A TypeScript port of the Telegram proxy configuration parser, optimized for Bun 
 
 ## Setup
 
-1. Install dependencies:
+Install dependencies:
 ```bash
 bun install
-```
-
-2. Create initial JSON files (if they don't exist):
-```bash
-echo "[]" > "telegram channels.json"
-echo "[]" > "invalid telegram channels.json"
 ```
 
 ## Usage
@@ -42,8 +36,8 @@ The script will prompt you for:
 
 ## Output Files
 
-- `telegram channels.json` - Valid channels with proxy configs
-- `invalid telegram channels.json` - Channels without proxy configs  
+- `telegram_channels.json` - Valid channels with proxy configs
+- `invalid_channels.json` - Channels without proxy configs  
 - `config-tg.txt` - Extracted and cleaned proxy configurations
 
 ## Supported Proxy Protocols
